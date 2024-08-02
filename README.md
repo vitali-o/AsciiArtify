@@ -1,7 +1,3 @@
-
-
-
-
 ### Вступ
 
 - Minikube - це інструмент для створення середовища Kubernetes на локальному комп'ютері або ноутбуці. Технічно це дистрибутив Kubernetes, але оскільки він призначений для іншого типу використання, ніж більшість інших дистрибутивів 
@@ -66,3 +62,43 @@
 2. **Обмежена масштабованість:** k3d підходить для локального розвитку та тестування, але може бути менш ефективним для великих виробничих середовищ через обмеження Docker.
 3. **Залежність від Docker:** k3d використовує Docker для запуску кластерів Kubernetes, що може бути проблемою, якщо у вас є обмеження на використання Docker або якщо ви використовуєте інші контейнерні платформи.
 4. **Менша спільнота та підтримка:** порівняно з іншими рішеннями, такими як Minikube або Kind, k3d має меншу спільноту користувачів і менше доступних ресурсів для вирішення проблем.
+
+### Демонстрація
+![demo](https://github.com/vitali-o/AsciiArtify/blob/main/demo.gif?raw=true)
+
+### Висновки:
+k3d є найбільш універсальним інструментом, завдяки легкості, швидкій роботі, можливості масштабування і підтримці ingress
+
+#### Установка:
+```
+wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
+k3d cluster create -p "80:80@loadbalancer" --agents 2
+export KUBECONFIG="$(k3d kubeconfig write k3s-default)"
+kubectl create deployment asciiartify --image=vitaliio/asciiartify:v1.0.0
+kubectl create service clusterip asciiartify --tcp=80:80
+kubectl apply -f ingress.yaml
+kubectl autoscale deployment asciiartify --cpu-percent=50 --min=2 --max=10
+```
+
+файл ingress.yaml:
+
+```
+# apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: nginx
+            port:
+              number: 80
+```
