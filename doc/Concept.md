@@ -87,7 +87,7 @@ kubectl autoscale deployment asciiartify --cpu-percent=50 --min=2 --max=10
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx
+  name: asciiartify
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
 spec:
@@ -98,7 +98,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: nginx
+            name: asciiartify
             port:
               number: 80
 ```
