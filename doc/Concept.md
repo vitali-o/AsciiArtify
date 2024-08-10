@@ -72,33 +72,32 @@ k3d є найбільш універсальним інструментом, з�
 #### Установка:
 ```
 wget -q -O - https://raw.githubusercontent.com/k3d-io/k3d/main/install.sh | bash
-k3d cluster create -p "80:80@loadbalancer" --agents 2
+k3d cluster create -p "80:30080@agent:0" --agents 2
 export KUBECONFIG="$(k3d kubeconfig write k3s-default)"
 kubectl create deployment asciiartify --image=vitaliio/asciiartify:v1.0.0
-kubectl create service clusterip asciiartify --tcp=80:80
-kubectl apply -f ingress.yaml
 kubectl autoscale deployment asciiartify --cpu-percent=50 --min=2 --max=10
-```
-
-файл ingress.yaml:
+kubectl apply -f nodeport.yaml
 
 ```
-# apiVersion: networking.k8s.io/v1beta1 # for k3s < v1.19
-apiVersion: networking.k8s.io/v1
-kind: Ingress
+
+файл nodeport.yaml:
+
+```
+apiVersion: v1
+kind: Service
 metadata:
-  name: asciiartify
-  annotations:
-    ingress.kubernetes.io/ssl-redirect: "false"
+  labels:
+    app: nginx
+  name: nginx
 spec:
-  rules:
-  - http:
-      paths:
-      - path: /
-        pathType: Prefix
-        backend:
-          service:
-            name: asciiartify
-            port:
-              number: 80
+  ports:
+  - name: 80-80
+    nodePort: 30080
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: nginx
+  type: NodePort
+  
 ```
