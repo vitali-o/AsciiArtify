@@ -4,7 +4,7 @@
 - pass: q1w2e3r4
 
 
-![demo](https://github.com/vitali-o/AsciiArtify/blob/main/argo.png?raw=true)
+![demo](https://github.com/vitali-o/AsciiArtify/blob/main/images/argo.png?raw=true)
 
 Детальна інформація щодо використання argoCD доступана на [офіційному сайті](https://argo-cd.readthedocs.io/en/stable/)
 Поточна документація буде доповнюватися

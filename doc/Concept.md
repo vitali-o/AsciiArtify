@@ -64,7 +64,7 @@
 4. **Менша спільнота та підтримка:** порівняно з іншими рішеннями, такими як Minikube або Kind, k3d має меншу спільноту користувачів і менше доступних ресурсів для вирішення проблем.
 
 ### Демонстрація
-![demo](https://github.com/vitali-o/AsciiArtify/blob/main/demo.gif?raw=true)
+![demo](https://github.com/vitali-o/AsciiArtify/blob/main/images/demo.gif?raw=true)
 
 ### Висновки:
 k3d є найбільш універсальним інструментом, завдяки легкості, швидкій роботі, можливості масштабування і підтримці ingress
@@ -99,5 +99,5 @@ spec:
   selector:
     app: nginx
   type: NodePort
-  
+
 ```
